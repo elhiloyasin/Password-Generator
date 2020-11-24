@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Password Generator</title>
+    <link rel="stylesheet" href="./Assets/css/style.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Password Generator</h1>
+      </header>
+      <div class="card">
+        <div class="card-header">
+          <h2>Generate a Password</h2>
+        </div>
+        <div class="card-body">
+          <textarea
+            readonly
+            id="password"
+            placeholder="Your Secure Password"
+            aria-label="Generated Password"
+          ></textarea>
+        </div>
+        <div class="card-footer">
+          <button id="generate" class="btn">Generate Password</button>
+        </div>
+      </div>
+    </div>
+    <script src="./Assets/javascript/script.js"></script>
+    
+    <script>
+      //Assigning dom elements to variables.
+      let button = document.getElementById("generate");
+      let output = document.getElementById("password");
+      //Assigning even to the generate button to begin to generateRandomPassword function.
+      button.addEventListener('click', function(event) {
+         event.preventDefault();
+         generateRandomPassword();
+      })
+      //generateRandomPassword funtion to begin on click. 
+      function generateRandomPassword(){
+         let length = parseInt(
+			prompt('Please enter the number Password characters your like')
+      );
+      //If the length is equal to 8 or higher we will begin the sequance to generate the password, else if we will alert user to try again.  
+		if (length >= 8) {
+      
+      // Function to generate special characters when called by the generate sequence function, to insert a special char. 
+			function genSpecialChar() {
+        //This x will generate a random number from 1-4 to be used in the switch statement this is to ensure that all special chars from available in the ascii table are available and completly randomized.
+				let x = Math.floor(Math.random() * (4 - 1) + 1);
+        
+				switch (x) {
+					case 1: random = Math.random() * (47 - 33) + 33;
+						break;
+					case 2: random = Math.random() * (64 - 58) + 58;
+						break;
+					case 3: random = Math.random() * (96 - 91) + 91;
+						break;
+					case 4: random = Math.random() * (126 - 123) + 123;
+						break;
+				}
+
+				return Math.floor(random);
+			}
+      //This function will generate a random char or numeral and this will be based on request from the generate sequance function
+			function genChar(max, min) {
+				let random = Math.random() * (max - min) + min;
+				let floored = Math.floor(random);
+				return floored;
+      }
+  
+      // Counter will increment and assign its incremented value to each criteria of characters 
+			let counter = 0;
+      // For each criteria, counter will assign its incremented value self or a 0 that will. variable with '0' values will be ignored in the genSequence function.
+			let _special = confirm("Would you like special characters?") ? ++counter : 0;
+			let _numeral = confirm("Do you want any numbers?") ? ++counter : 0;
+			let _lower = confirm("Any Lowercase?") ? ++counter : 0;
+      let _upper = confirm("Any Uppercase?") ? ++counter : 0;
+
+      //counter is equal to zero only if no criteria was selected.
+      if(counter === 0) return alert("Sorry, password must contain one criteria of characters!")
+         
+			let password = "";
+       // That function generates sequence to assembel the random password string. 
+			function genSequence() {
+				let x = 1;
+				let flag = false;
+				while (password.length < length) {
+          // x wil run up to the value of counter (max of 4) and then the conditional statement will begin to assign random intiger values from 1 to 4 
+					if (x >= counter || flag) {
+						x = genChar(4, 1);
+						flag = true;
+					} else x++;
+          // To initiate sequence, x will normally increment itself up to the value of counter and the switch mechanism will recieve a randomized value of x
+          // Each case in the switch mechanism will continue to add a char on each loop, if any case has been assigned a variable that is equal to zero it will be ignored. 
+					switch (x) {
+						case _special: password += String.fromCharCode(genSpecialChar());
+							break;
+						case _numeral: password += genChar(0, 10);
+							break;
+						case _upper: password += String.fromCharCode(genChar(90, 65));
+							break;
+						case _lower: password += String.fromCharCode(genChar(122, 97));
+							break;
+					}
+				}
+				return password;
+			}
+
+
+			genSequence();
+      // We split the password into an arrey
+			password = password.split("");
+      // We give the arrey a shuffle then join it back into a string.  
+			password = password.sort(() => Math.random() - 0.5).join("");
+      // Output password to user. 
+			output.innerHTML = password;
+		} else {
+			alert("Sorry your password must atleast  be 8 characters and no more than 128 characters!");
+      }
+   }
+</script>
+  </body>
+
+</html>
