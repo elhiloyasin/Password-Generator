@@ -20,7 +20,7 @@ https://elhiloyasin.github.io/Password-Generator/
 ## Images of Application
 ```
 (Assets/images/screenshotone.png);
-(assets/images/screenshottwo.png);
+(Assets/images/screenshottwo.png);
 
 ```
 
